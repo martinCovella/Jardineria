@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Huertocity — Tapizando Barcelona en Verde</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Great+Vibes&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:           #EDE8D8;
+      --bg-alt:       #F4F0E6;
+      --card-bg:      #F1EBE0;
+      --card-border:  #DDD6C2;
+      --ink:          #1A1816;
+      --ink-muted:    #8A836F;
+      --sage:         #7A8C69;
+      --sage-light:   #B2C1A0;
+      --sage-dark:    #4A6040;
+      --forest:       #2A3E2A;
+      --gold:         #B8925A;
+      --gold-light:   #D4AF82;
+      --shadow:       rgba(26,24,22,0.07);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400; line-height: 1.12;
+    }
+
+    .section-label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: .68rem; font-weight: 500;
+      letter-spacing: .26em; text-transform: uppercase;
+      color: var(--sage); display: block; margin-bottom: .9rem;
+    }
+
+    /* ── NAVIGATION ─────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      padding: 1.4rem 2.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background .4s, box-shadow .4s, padding .4s;
+    }
+
+    nav.scrolled {
+      background: var(--bg);
+      box-shadow: 0 1px 0 var(--card-border);
+      padding: .9rem 2.5rem;
+    }
+
+    .nav-logo {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2rem; color: #fff;
+      text-decoration: none; transition: color .4s;
+    }
+
+    nav.scrolled .nav-logo { color: var(--forest); }
+
+    .nav-links {
+      display: flex; align-items: center; gap: 2.25rem; list-style: none;
+    }
+
+    .nav-links a {
+      font-size: .825rem; letter-spacing: .04em; font-weight: 300;
+      color: rgba(255,255,255,.82); text-decoration: none; transition: color .3s;
+    }
+
+    nav.scrolled .nav-links a { color: var(--ink-muted); }
+    .nav-links a:hover { color: #fff !important; }
+    nav.scrolled .nav-links a:hover { color: var(--ink) !important; }
+
+    .nav-cta {
+      font-size: .825rem !important; font-weight: 500 !important;
+      color: #fff !important; background: var(--sage-dark);
+      padding: .55rem 1.4rem; border-radius: 2px;
+      transition: background .3s;
+    }
+
+    .nav-cta:hover { background: var(--forest) !important; }
+
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 4px; background: none; border: none;
+    }
+
+    .hamburger span {
+      width: 24px; height: 1.5px;
+      background: #fff; transition: background .4s;
+    }
+
+    nav.scrolled .hamburger span { background: var(--ink); }
+
+    .mobile-menu {
+      display: none; position: fixed; inset: 0;
+      background: var(--bg-alt); z-index: 999;
+      flex-direction: column; align-items: center; justify-content: center;
+      gap: 2.5rem;
+    }
+
+    .mobile-menu.open { display: flex; }
+
+    .mobile-menu a {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.75rem; font-weight: 300;
+      color: var(--ink); text-decoration: none;
+    }
+
+    .mobile-close {
+      position: absolute; top: 1.5rem; right: 2rem;
+      font-size: 1.5rem; cursor: pointer;
+      color: var(--ink-muted); background: none; border: none; font-weight: 300;
+    }
+
+    /* ── HERO ────────────────────────────────────────── */
+    .hero {
+      position: relative; height: 100vh; min-height: 620px;
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+    }
+
+    .hero-video {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover; z-index: 0;
+      pointer-events: none;
+    }
+
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom,
+        rgba(10,18,10,.30) 0%,
+        rgba(10,18,10,.05) 45%,
+        rgba(10,18,10,.65) 100%);
+    }
+
+    .hero-content {
+      position: relative; z-index: 2;
+      text-align: center; padding: 0 1.5rem;
+    }
+
+    .hero-eyebrow {
+      font-size: .68rem; letter-spacing: .32em; text-transform: uppercase;
+      color: rgba(255,255,255,.65); margin-bottom: 1.1rem; display: block;
+    }
+
+    .hero-title {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(4.5rem, 12vw, 11rem);
+      color: #fff; line-height: 1; margin-bottom: 1.4rem;
+      text-shadow: 0 2px 40px rgba(0,0,0,.14);
+    }
+
+    .hero-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.1rem, 2.2vw, 1.45rem);
+      font-weight: 300; font-style: italic;
+      color: rgba(255,255,255,.82);
+      max-width: 480px; margin: 0 auto 3rem; line-height: 1.6;
+    }
+
+    .hero-cta {
+      display: inline-block;
+      font-size: .82rem; font-weight: 500; letter-spacing: .1em;
+      color: #fff;
+      border: 1px solid rgba(255,255,255,.5);
+      padding: 1rem 2.75rem; border-radius: 1px;
+      text-decoration: none;
+      transition: background .3s, border-color .3s;
+    }
+
+    .hero-cta:hover {
+      background: rgba(74,96,64,.75);
+      border-color: transparent;
+    }
+
+    .hero-scroll {
+      position: absolute; bottom: 2.5rem; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: .5rem;
+      font-size: .62rem; letter-spacing: .22em; text-transform: uppercase;
+      color: rgba(255,255,255,.5);
+      animation: bobble 2.4s ease-in-out infinite;
+    }
+
+    .hero-scroll::after {
+      content: ''; display: block;
+      width: 1px; height: 40px;
+      background: rgba(255,255,255,.3); margin-top: .25rem;
+    }
+
+    @keyframes bobble {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* ── SECTION BASE ────────────────────────────────── */
+    section { padding: 8rem 2.5rem; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .section-divider { height: 1px; background: var(--card-border); margin: 4rem 0; }
+
+    /* ── ABOUT / SERVICES ────────────────────────────── */
+    .about { background: var(--bg-alt); }
+
+    /* Centered typographic mission statement */
+    .mission-row {
+      text-align: center;
+      padding-bottom: 5rem;
+      max-width: 860px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .mission-row > .section-label {
+      display: block;
+      margin-bottom: 2rem;
+    }
+
+    .mission-headline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 5.5vw, 5.2rem);
+      font-weight: 300; line-height: 1.16;
+      color: var(--ink); margin-bottom: 2.5rem;
+    }
+
+    .mission-headline em {
+      font-style: italic; color: var(--sage-dark);
+    }
+
+    .mission-body-text {
+      font-size: .95rem; color: var(--ink-muted);
+      line-height: 1.9; font-weight: 300;
+      max-width: 520px; margin: 0 auto 2.5rem;
+    }
+
+    .mission-cta {
+      font-family: 'DM Sans', sans-serif;
+      font-size: .76rem; font-weight: 500; letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--sage-dark); text-decoration: none;
+      display: inline-flex; align-items: center; gap: .5rem;
+      white-space: nowrap;
+      border-bottom: 1px solid var(--sage-light);
+      padding-bottom: 3px;
+      transition: gap .2s, color .3s, border-color .3s;
+    }
+
+    .mission-cta:hover { gap: .8rem; color: var(--forest); border-color: var(--forest); }
+
+    /* ── SERVICES ACCORDION LIST ────────────────────── */
+    .sl-wrapper { }
+
+    .sl-header { margin-bottom: 4rem; }
+
+    .sl-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 5.5vw, 5rem);
+      font-weight: 300; line-height: 1.08; color: var(--ink);
+    }
+
+    .sl-title em { font-style: italic; color: var(--sage-dark); }
+
+    .sl-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 5rem;
+      align-items: start;
+    }
+
+    .sl-col-label {
+      display: block;
+      margin-bottom: 1.75rem;
+    }
+
+    .sl-list { border-top: 1px solid var(--card-border); }
+
+    .sl-item { border-bottom: 1px solid var(--card-border); }
+
+    .sl-row {
+      display: grid;
+      grid-template-columns: 2.75rem 1fr 1.25rem;
+      align-items: start;
+      gap: .75rem;
+      width: 100%; padding: 1.4rem 0;
+      background: none; border: none; cursor: pointer; text-align: left;
+    }
+
+    .sl-num {
+      font-family: 'DM Sans', sans-serif;
+      font-size: .66rem; font-weight: 400;
+      color: var(--ink-muted); letter-spacing: .08em;
+      padding-top: .3rem;
+    }
+
+    .sl-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.05rem, 1.4vw, 1.3rem);
+      font-weight: 400; color: var(--ink); line-height: 1.3;
+      transition: color .22s ease;
+    }
+
+    .sl-item:hover .sl-name,
+    .sl-item.open  .sl-name { color: var(--sage-dark); }
+
+    .sl-icon {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem; font-weight: 300; color: var(--ink-muted);
+      line-height: 1; padding-top: .25rem;
+      transition: transform .3s ease, color .22s ease;
+      justify-self: end;
+    }
+
+    .sl-item.open .sl-icon { transform: rotate(45deg); color: var(--sage-dark); }
+
+    .sl-body {
+      overflow: hidden; max-height: 0;
+      transition: max-height .38s ease, padding .38s ease;
+      padding: 0 0 0 3.5rem;
+    }
+
+    .sl-item.open .sl-body {
+      max-height: 120px;
+      padding: 0 0 1.4rem 3.5rem;
+    }
+
+    .sl-body p {
+      font-size: .855rem; color: var(--ink-muted);
+      line-height: 1.85; font-weight: 300;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RECENT PROJECTS CAROUSEL ───────────────────── */
+    .projects {
+      background: var(--bg);
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .projects-header {
+      padding: 0 2.5rem;
+      max-width: 1280px;
+      margin: 0 auto 3.5rem;
+    }
+
+    .projects-header h2 {
+      font-size: clamp(2.6rem, 5vw, 4rem);
+      color: var(--ink); font-weight: 300; line-height: 1.1;
+    }
+
+    .projects-header h2 em { font-style: italic; color: var(--sage-dark); }
+
+    .carousel-wrap {
+      overflow: hidden;
+      width: 100%;
+    }
+
+
+    .carousel-track {
+      display: flex;
+      width: max-content;
+      animation: carouselLeft 42s linear infinite;
+    }
+
+    @keyframes carouselLeft {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    .c-slide {
+      flex-shrink: 0;
+      width: 340px;
+      height: 500px;
+      border-radius: 14px;
+      overflow: hidden;
+      margin-right: 14px;
+    }
+
+    .c-slide img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+    }
+
+    /* ── TESTIMONIALS (scrolling columns) ─────────────── */
+    .testimonials { background: var(--bg); }
+
+    .t-intro { text-align: center; max-width: 540px; margin: 0 auto 4rem; }
+
+    .t-badge {
+      display: inline-block;
+      font-size: .64rem; font-weight: 500; letter-spacing: .26em; text-transform: uppercase;
+      color: var(--sage-dark);
+      border: 1px solid var(--card-border);
+      background: rgba(74,96,64,.06);
+      padding: .3rem 1rem; border-radius: 50px; margin-bottom: 1.4rem;
+    }
+
+    .t-intro h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem, 4.5vw, 3.8rem);
+      font-weight: 300; color: var(--ink); line-height: 1.1; margin-bottom: 1rem;
+    }
+
+    .t-intro h2 em { font-style: italic; color: var(--sage-dark); }
+
+    .t-intro p { font-size: .95rem; color: var(--ink-muted); line-height: 1.82; font-weight: 300; }
+
+    .t-columns-wrap {
+      display: flex; justify-content: center; gap: 1.25rem;
+      max-height: 720px; overflow: hidden;
+      mask-image: linear-gradient(to bottom, transparent, black 8%, black 92%, transparent);
+      -webkit-mask-image: linear-gradient(to bottom, transparent, black 8%, black 92%, transparent);
+    }
+
+    .t-col { flex: 0 0 310px; overflow: hidden; }
+    .t-col--2 { display: none; }
+    .t-col--3 { display: none; }
+
+    .t-track {
+      list-style: none; display: flex; flex-direction: column;
+      gap: 1.25rem; padding: 0; margin: 0;
+      animation: tScrollUp linear infinite;
+    }
+
+    .t-track--1 { animation-duration: 22s; }
+    .t-track--2 { animation-duration: 28s; }
+    .t-track--3 { animation-duration: 24s; }
+
+    .t-track:hover { animation-play-state: paused; }
+
+    @keyframes tScrollUp {
+      from { transform: translateY(0); }
+      to   { transform: translateY(-50%); }
+    }
+
+    .t-card {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 16px; padding: 1.75rem;
+      cursor: default; user-select: none;
+      transition: transform .3s ease, box-shadow .3s ease;
+      position: relative; overflow: hidden;
+    }
+
+    .t-card:hover {
+      transform: scale(1.025) translateY(-5px);
+      box-shadow: 0 22px 48px rgba(26,24,22,.1);
+    }
+
+    .t-card::before {
+      content: '\201C';
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 6rem; line-height: 1;
+      color: rgba(122,140,105,.1);
+      position: absolute; top: -1rem; left: 1rem;
+      pointer-events: none; user-select: none;
+    }
+
+    .t-stars { color: var(--gold); font-size: .75rem; letter-spacing: .06em; margin-bottom: .9rem; }
+
+    .t-quote-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem; font-style: italic; font-weight: 400;
+      color: var(--ink); line-height: 1.72; margin: 0; position: relative; z-index: 1;
+    }
+
+    .t-footer { display: flex; align-items: center; gap: .9rem; margin-top: 1.3rem; }
+
+    .t-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      object-fit: cover; border: 1.5px solid var(--card-border); flex-shrink: 0;
+    }
+
+    .t-name { font-size: .84rem; font-weight: 500; color: var(--ink); display: block; line-height: 1.3; }
+    .t-role { font-size: .7rem; color: var(--ink-muted); margin-top: .1rem; display: block; }
+
+    /* ── CONTACT ─────────────────────────────────────── */
+    .contact { background: var(--bg-alt); }
+
+    .contact-inner {
+      display: grid; grid-template-columns: 1.2fr .8fr;
+      gap: 6rem; align-items: start;
+    }
+
+    .contact-left > .section-label { margin-bottom: 1rem; }
+
+    .contact-left > h2 {
+      font-size: clamp(2.6rem, 4.5vw, 4rem);
+      font-weight: 300; margin-bottom: 1.25rem;
+    }
+
+    .contact-left > h2 em { font-style: italic; color: var(--sage-dark); }
+
+    .contact-left > p {
+      font-size: .95rem; color: var(--ink-muted);
+      margin-bottom: 3rem; line-height: 1.85; font-weight: 300;
+    }
+
+    .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    .form-group { display: flex; flex-direction: column; gap: .4rem; }
+
+    .form-group label {
+      font-size: .66rem; font-weight: 500;
+      letter-spacing: .14em; text-transform: uppercase; color: var(--ink-muted);
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      font-family: 'DM Sans', sans-serif; font-size: .875rem; color: var(--ink);
+      background: var(--bg); border: 1px solid var(--card-border);
+      border-radius: 2px; padding: .85rem 1rem;
+      outline: none; resize: vertical; transition: border-color .3s; appearance: none;
+    }
+
+    .form-group select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A836F' stroke-width='1.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      padding-right: 2.5rem;
+      cursor: pointer;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: var(--sage-dark);
+    }
+
+    .form-group input.invalid,
+    .form-group select.invalid {
+      border-color: #c0392b !important;
+      background: #fff9f9;
+    }
+
+    .field-error {
+      font-size: .68rem; color: #c0392b;
+      letter-spacing: .02em; font-weight: 400;
+    }
+
+    .form-group label .req {
+      color: #c0392b; margin-left: .2rem;
+    }
+
+    .form-group textarea { min-height: 130px; }
+
+    /* Image upload field */
+    .upload-trigger {
+      display: flex; align-items: center; gap: .75rem;
+      padding: .85rem 1rem;
+      background: var(--bg); border: 1px dashed var(--card-border);
+      border-radius: 2px; cursor: pointer;
+      font-family: 'DM Sans', sans-serif; font-size: .875rem; color: var(--ink-muted);
+      transition: border-color .3s, color .3s;
+      user-select: none;
+    }
+
+    .upload-trigger:hover { border-color: var(--sage-dark); color: var(--sage-dark); }
+    .upload-trigger svg { flex-shrink: 0; }
+
+    #fphotos { display: none; }
+
+    .upload-preview {
+      display: flex; flex-wrap: wrap; gap: .65rem; margin-top: .6rem;
+    }
+
+    .thumb-wrap {
+      position: relative; width: 62px; height: 62px; flex-shrink: 0;
+    }
+
+    .thumb-wrap img {
+      width: 100%; height: 100%; object-fit: cover;
+      border-radius: 4px; border: 1px solid var(--card-border); display: block;
+    }
+
+    .thumb-del {
+      position: absolute; top: -5px; right: -5px;
+      width: 17px; height: 17px; border-radius: 50%;
+      background: var(--ink); color: #fff;
+      border: none; cursor: pointer;
+      font-size: .7rem; font-weight: 600; line-height: 1;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s;
+      padding: 0;
+    }
+
+    .thumb-del:hover { background: #b33; }
+
+    .form-submit {
+      font-family: 'DM Sans', sans-serif;
+      font-size: .82rem; font-weight: 500; letter-spacing: .1em;
+      color: #fff; background: var(--sage-dark);
+      border: none; border-radius: 1px;
+      padding: 1rem 2.5rem; cursor: pointer;
+      align-self: flex-start;
+      transition: background .3s;
+    }
+
+    .form-submit:hover { background: var(--forest); }
+
+    .contact-info { display: flex; flex-direction: column; gap: 2rem; padding-top: 1rem; }
+
+    .ci-block h4 {
+      font-size: .64rem; font-weight: 500;
+      letter-spacing: .24em; text-transform: uppercase;
+      color: var(--sage); margin-bottom: .5rem;
+    }
+
+    .ci-block p,
+    .ci-block a {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem; font-weight: 300; color: var(--ink);
+      text-decoration: none; line-height: 1.65; transition: color .3s;
+    }
+
+    .ci-block a:hover { color: var(--sage-dark); }
+    .ci-divider { width: 36px; height: 1px; background: var(--card-border); }
+
+    /* ── FOOTER ──────────────────────────────────────── */
+    footer { background: var(--forest); padding: 5rem 2.5rem 2.5rem; }
+
+    .footer-inner { max-width: 1200px; margin: 0 auto; }
+
+    .footer-top {
+      display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 4rem;
+      padding-bottom: 3.5rem;
+      border-bottom: 1px solid rgba(255,255,255,.08); margin-bottom: 2.5rem;
+    }
+
+    .footer-brand .script-logo {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2.75rem; color: #fff;
+      display: block; margin-bottom: .8rem;
+    }
+
+    .footer-brand p {
+      font-size: .875rem; font-weight: 300;
+      color: rgba(255,255,255,.45); line-height: 1.85; max-width: 280px;
+    }
+
+    .footer-col h5 {
+      font-size: .64rem; font-weight: 500; letter-spacing: .24em;
+      text-transform: uppercase; color: rgba(255,255,255,.35); margin-bottom: 1.25rem;
+    }
+
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: .75rem; }
+
+    .footer-col ul a {
+      font-size: .875rem; font-weight: 300;
+      color: rgba(255,255,255,.6); text-decoration: none; transition: color .3s;
+    }
+
+    .footer-col ul a:hover { color: #fff; }
+
+    .footer-bottom {
+      display: flex; justify-content: space-between;
+      align-items: center; flex-wrap: wrap; gap: 1rem;
+    }
+
+    .footer-bottom p { font-size: .75rem; color: rgba(255,255,255,.28); }
+
+    .footer-social { display: flex; gap: 1.75rem; }
+
+    .footer-social a {
+      font-size: .75rem; letter-spacing: .1em;
+      color: rgba(255,255,255,.42); text-decoration: none; transition: color .3s;
+    }
+
+    .footer-social a:hover { color: #fff; }
+
+    /* ── SCROLL ANIMATIONS ───────────────────────────── */
+    .fade-up {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity .75s ease, transform .75s ease;
+    }
+
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    .stagger > *:nth-child(1) { transition-delay: 0s; }
+    .stagger > *:nth-child(2) { transition-delay: .12s; }
+    .stagger > *:nth-child(3) { transition-delay: .24s; }
+
+    /* ── RESPONSIVE ──────────────────────────────────── */
+    @media (max-width: 860px) {
+      .sl-columns { grid-template-columns: 1fr; gap: 3.5rem 0; }
+    }
+
+    @media (max-width: 1024px) {
+      .contact-inner { grid-template-columns: 1fr; gap: 3.5rem; }
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+      .footer-brand { grid-column: span 2; }
+    }
+
+    @media (min-width: 768px)  { .t-col--2 { display: block; } }
+    @media (min-width: 1024px) { .t-col--3 { display: block; } }
+
+    @media (max-width: 768px) {
+      section { padding: 5rem 1.25rem; }
+      nav { padding: 1.1rem 1.25rem; }
+      nav.scrolled { padding: .8rem 1.25rem; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+
+      .projects-header { padding: 0 1.25rem; }
+      .c-slide { width: 220px; height: 325px; }
+
+      .form-row { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+      .footer-brand { grid-column: span 1; }
+    }
+
+    @media (max-width: 480px) {
+      .c-slide { width: 170px; height: 250px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAVIGATION ───────────────────────────────────── -->
+  <nav id="navbar">
+    <a href="#" class="nav-logo">Huertocity</a>
+    <ul class="nav-links">
+      <li><a href="#about">Nosotros</a></li>
+      <li><a href="#projects">Proyectos</a></li>
+      <li><a href="#testimonials">Testimonios</a></li>
+      <li><a href="#contact" class="nav-cta">Contactar</a></li>
+    </ul>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Abrir menú">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-close" id="mobileClose">✕</button>
+    <a href="#about"        class="ml">Nosotros</a>
+    <a href="#projects"     class="ml">Proyectos</a>
+    <a href="#testimonials" class="ml">Testimonios</a>
+    <a href="#contact"      class="ml">Contactar</a>
+  </div>
+
+  <!-- ── HERO ─────────────────────────────────────────── -->
+  <section class="hero" id="home">
+    <video
+      id="heroVideo"
+      class="hero-video"
+      muted
+      playsinline
+      preload="auto"
+    >
+      <source src="Assets/hero_combined.mp4" type="video/mp4">
+    </video>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <span class="hero-eyebrow">Barcelona &nbsp;·&nbsp; Jardinería &amp; Huertos Urbanos</span>
+      <h1 class="hero-title">Huertocity</h1>
+      <p class="hero-subtitle">Tapizando Barcelona en verde.<br>Servicios de Jardinería y Huertos Urbanos.</p>
+      <a href="#projects" class="hero-cta">Descubrir nuestros proyectos</a>
+    </div>
+    <div class="hero-scroll">Scroll</div>
+  </section>
+
+  <!-- ── TESTIMONIALS ──────────────────────────────────── -->
+  <section class="testimonials" id="testimonials">
+    <div class="container">
+
+      <div class="t-intro fade-up">
+        <span class="t-badge">Testimonios</span>
+        <h2>Lo que <em>dicen</em> nuestros clientes</h2>
+        <p>Descubre cómo propietarios, hoteles y empresas de Barcelona han transformado sus espacios con Huertocity.</p>
+      </div>
+
+      <div class="t-columns-wrap fade-up" role="region" aria-label="Testimonios de clientes">
+
+        <!-- Column 1 -->
+        <div class="t-col">
+          <ul class="t-track t-track--1">
+            <li class="t-card">
+              <div class="t-stars">★★★★★</div>
+              <p class="t-quote-text">"Great service, the plants at the hotel look better than ever. Stuart y Chris son unos profesionales excepcionales — totalmente recomendados."</p>
+              <div class="t-footer">
+                <img class="t-avatar" src="https://i.pravatar.cc/100?img=47" alt="Julia R.">
+                <div><span class="t-name">Julia R.</span><span class="t-role">Hotel Brummel, Poble Sec</span></div>
+              </div>
+            </li>
+            <li class="t-card">
+              <div class="t-stars">★★★★★</div>
+              <p class="t-quote-text">"Servicio de jardinería 360 inmejorable. Puntuales, muy profesionales y con una atención al detalle que marca la diferencia."</p>
+              <div class="t-footer">
+                <img class="t-avatar" src="https://i.pravatar.cc/100?img=12" alt="Marc C.">
+                <div><span class="t-name">Marc C.</span><span class="t-role">Propietario, Barcelona</span></div>
+              </div>
+            </li>
+            <li class="t-card">
+              <div class="t-stars">★★★★★</div>
+              <p class="t-quote-text">"Instalaron un huerto urbano en nuestra terraza y nos enseñaron a cuidarlo. Ahora cosechamos tomates y hierbas aromáticas todo el año."</p>
+              <div class="t-footer">
+                <img class="t-avatar" src="https://i.pravatar.cc/100?img=32" alt="Elena M.">
+                <div><span class="t-name">Elena M.</span><span class="t-role">Propietaria, Gràcia</span></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Column 2 -->
+        <div class="t-col t-col--2">
+          <ul class="t-track t-track--2">
+            <li class="t-card">
+              <div class="t-stars">★★★★★</div>
+              <p class="t-quote-text">"Me ha satisfecho enormemente la seriedad y profesionalidad del servicio. El jardín de mi terraza ha quedado precioso — exactamente lo que quería."</p>
+              <div class="t-footer">
+                <img class="t-avatar" src="https://i.pravatar.cc/100?img=68" alt="Sophie N.">
+                <div><span class="t-name">Sophie N.</span><span class="t-role">Residente, Eixample</span></div>
+              </div>
+            </li>
+            <li class="t-card">
+              <div class="t-stars">★★★★★</div>
+              <p class="t-quote-text">"Gracias Stuart y Chris por el fantástico trabajo en nuestro jardín. La poda y el rediseño han superado todas nuestras expectativas."</p>
+              <div class="t-footer">
+                <img class="t-avatar" src="https://i.pravatar.cc/100?img=29" alt="Marisol R.">
+                <div><span class="t-name">Marisol R.</span><span class="t-role">Propietaria, Sarrià</span></div>
+              </div>
+            </li>
+            <li class="t-card">
+              <div class="t-stars">★★★★★</div>
+              <p class="t-quote-text">"Diseñaron el jardín interior de nuestra oficina. Es una auténtica bocanada de aire fresco — el equipo trabaja más feliz y la productividad se nota."</p>
+              <div class="t-footer">
+                <img class="t-avatar" src="https://i.pravatar.cc/100?img=15" alt="Carles B.">
+                <div><span class="t-name">Carles B.</span><span class="t-role">Director, startup tecnológica, 22@</span></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Column 3 -->
+        <div class="t-col t-col--3">
+          <ul class="t-track t-track--3">
+            <li class="t-card">
+              <div class="t-stars">★★★★★</div>
+              <p class="t-quote-text">"Implantaron un huerto pedagógico en nuestro colegio y los niños están encantados. Un proyecto transformador que va mucho más allá del jardín."</p>
+              <div class="t-footer">
+                <img class="t-avatar" src="https://i.pravatar.cc/100?img=25" alt="Marta F.">
+                <div><span class="t-name">Marta F.</span><span class="t-role">Directora, Escola Eixample</span></div>
+              </div>
+            </li>
+            <li class="t-card">
+              <div class="t-stars">★★★★★</div>
+              <p class="t-quote-text">"Llevamos dos años con su mantenimiento mensual y la terraza siempre está impecable. Puntuales, limpios y con un trato cercano excepcional."</p>
+              <div class="t-footer">
+                <img class="t-avatar" src="https://i.pravatar.cc/100?img=55" alt="Ana V.">
+                <div><span class="t-name">Ana V.</span><span class="t-role">Propietaria, Les Corts</span></div>
+              </div>
+            </li>
+            <li class="t-card">
+              <div class="t-stars">★★★★★</div>
+              <p class="t-quote-text">"Le dieron vida a la terraza de nuestro restaurante. Los clientes nos preguntan constantemente por las plantas. Ha sido una inversión de las que valen."</p>
+              <div class="t-footer">
+                <img class="t-avatar" src="https://i.pravatar.cc/100?img=58" alt="Pau G.">
+                <div><span class="t-name">Pau G.</span><span class="t-role">Chef, restaurante Born</span></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── ABOUT / SERVICES ─────────────────────────────── -->
+  <section class="about" id="about">
+    <div class="container">
+
+      <!-- Centered typographic mission statement -->
+      <div class="mission-row fade-up">
+        <span class="section-label">Nuestra misión</span>
+        <h2 class="mission-headline">
+          Somos jardineros ingleses que <em>tapizamos</em> Barcelona en verde con profesionalidad, cuidado y <em>pasión</em>
+        </h2>
+        <p class="mission-body-text">Stuart Franklin y Chris Nolan llevan más de 10 años transformando terrazas, balcones, jardines y huertos urbanos en Barcelona. Cada proyecto es único — diseñado y ejecutado con el compromiso de calidad que nos define.</p>
+        <a href="#contact" class="mission-cta">Hablar de su proyecto</a>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <!-- Services accordion list -->
+      <div class="sl-wrapper fade-up">
+
+        <div class="sl-header">
+          <h2 class="sl-title">Nuestros <em>Servicios</em></h2>
+        </div>
+
+        <div class="sl-columns">
+
+          <!-- ── JARDINERÍA ── -->
+          <div class="sl-col">
+            <span class="sl-col-label section-label">Jardinería</span>
+            <div class="sl-list">
+
+              <div class="sl-item">
+                <button class="sl-row" aria-expanded="false">
+                  <span class="sl-num">01</span>
+                  <span class="sl-name">Jardinería de Terrazas y Balcones en Barcelona</span>
+                  <span class="sl-icon">+</span>
+                </button>
+                <div class="sl-body">
+                  <p>Diseñamos e instalamos jardines en terrazas y balcones de Barcelona, adaptando cada espacio para maximizar la belleza y el aprovechamiento del área disponible.</p>
+                </div>
+              </div>
+
+              <div class="sl-item">
+                <button class="sl-row" aria-expanded="false">
+                  <span class="sl-num">02</span>
+                  <span class="sl-name">Diseño de Jardines y Paisajismo</span>
+                  <span class="sl-icon">+</span>
+                </button>
+                <div class="sl-body">
+                  <p>Creamos proyectos personalizados de jardines y paisajismo, combinando estética y funcionalidad para transformar cualquier espacio exterior.</p>
+                </div>
+              </div>
+
+              <div class="sl-item">
+                <button class="sl-row" aria-expanded="false">
+                  <span class="sl-num">03</span>
+                  <span class="sl-name">Terrazas para Bares y Restaurantes</span>
+                  <span class="sl-icon">+</span>
+                </button>
+                <div class="sl-body">
+                  <p>Transformamos terrazas comerciales en espacios verdes atractivos que mejoran la experiencia del cliente y diferencian el negocio.</p>
+                </div>
+              </div>
+
+              <div class="sl-item">
+                <button class="sl-row" aria-expanded="false">
+                  <span class="sl-num">04</span>
+                  <span class="sl-name">Jardinería para Oficinas, Hoteles y Comercios</span>
+                  <span class="sl-icon">+</span>
+                </button>
+                <div class="sl-body">
+                  <p>Aportamos zonas verdes a espacios corporativos, creando ambientes más agradables y productivos para empleados y clientes.</p>
+                </div>
+              </div>
+
+              <div class="sl-item">
+                <button class="sl-row" aria-expanded="false">
+                  <span class="sl-num">05</span>
+                  <span class="sl-name">Mantenimiento de Jardines</span>
+                  <span class="sl-icon">+</span>
+                </button>
+                <div class="sl-body">
+                  <p>Cuidamos tus plantas y jardines con visitas periódicas programadas, asegurando que siempre luzcan en su mejor estado.</p>
+                </div>
+              </div>
+
+              <div class="sl-item">
+                <button class="sl-row" aria-expanded="false">
+                  <span class="sl-num">06</span>
+                  <span class="sl-name">Poda de Frutales, Setos y Arbustos</span>
+                  <span class="sl-icon">+</span>
+                </button>
+                <div class="sl-body">
+                  <p>Realizamos podas técnicas para favorecer el crecimiento, la salud y la estética de frutales, setos y arbustos durante todo el año.</p>
+                </div>
+              </div>
+
+              <div class="sl-item">
+                <button class="sl-row" aria-expanded="false">
+                  <span class="sl-num">07</span>
+                  <span class="sl-name">Desarrollo de Proyectos</span>
+                  <span class="sl-icon">+</span>
+                </button>
+                <div class="sl-body">
+                  <p>Gestionamos tu proyecto de jardinería de principio a fin, desde el diseño inicial hasta la ejecución e instalación final.</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- ── HUERTOS URBANOS ── -->
+          <div class="sl-col">
+            <span class="sl-col-label section-label">Huertos Urbanos</span>
+            <div class="sl-list">
+
+              <div class="sl-item">
+                <button class="sl-row" aria-expanded="false">
+                  <span class="sl-num">01</span>
+                  <span class="sl-name">Diseño e Instalación de Huertos Urbanos</span>
+                  <span class="sl-icon">+</span>
+                </button>
+                <div class="sl-body">
+                  <p>Diseñamos e instalamos huertos urbanos a medida en terrazas, balcones y espacios interiores de Barcelona, adaptados a tus necesidades.</p>
+                </div>
+              </div>
+
+              <div class="sl-item">
+                <button class="sl-row" aria-expanded="false">
+                  <span class="sl-num">02</span>
+                  <span class="sl-name">Huertos en el Hogar</span>
+                  <span class="sl-icon">+</span>
+                </button>
+                <div class="sl-body">
+                  <p>Instalamos huertos domésticos para que disfrutes de verduras y hierbas frescas cultivadas por ti mismo en plena ciudad.</p>
+                </div>
+              </div>
+
+              <div class="sl-item">
+                <button class="sl-row" aria-expanded="false">
+                  <span class="sl-num">03</span>
+                  <span class="sl-name">Huertos en Residencias de Mayores</span>
+                  <span class="sl-icon">+</span>
+                </button>
+                <div class="sl-body">
+                  <p>Creamos huertos terapéuticos en residencias de mayores, favoreciendo el bienestar emocional, la actividad física y la conexión con la naturaleza.</p>
+                </div>
+              </div>
+
+              <div class="sl-item">
+                <button class="sl-row" aria-expanded="false">
+                  <span class="sl-num">04</span>
+                  <span class="sl-name">Instalación de Vegtrug Grande</span>
+                  <span class="sl-icon">+</span>
+                </button>
+                <div class="sl-body">
+                  <p>Instalamos el Vegtrug grande, una jardinera elevada de alta calidad ideal para cultivar en espacios reducidos con facilidad y sin esfuerzo.</p>
+                </div>
+              </div>
+
+              <div class="sl-item">
+                <button class="sl-row" aria-expanded="false">
+                  <span class="sl-num">05</span>
+                  <span class="sl-name">Huertos en Colegios y Centros Educativos</span>
+                  <span class="sl-icon">+</span>
+                </button>
+                <div class="sl-body">
+                  <p>Desarrollamos proyectos de huertos escolares que acercan a los niños al mundo de la naturaleza y la alimentación saludable desde el aula.</p>
+                </div>
+              </div>
+
+              <div class="sl-item">
+                <button class="sl-row" aria-expanded="false">
+                  <span class="sl-num">06</span>
+                  <span class="sl-name">Desarrollo de Proyectos</span>
+                  <span class="sl-icon">+</span>
+                </button>
+                <div class="sl-body">
+                  <p>Planificamos y ejecutamos proyectos de huertos urbanos completos, asesorándote en cada etapa del proceso con total dedicación.</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── RECENT PROJECTS ───────────────────────────────── -->
+  <section class="projects" id="projects">
+    <div class="projects-header fade-up">
+      <h2>Últimos <em>Proyectos</em></h2>
+    </div>
+
+    <div class="carousel-wrap">
+      <div class="carousel-track">
+        <!-- 7 original slides -->
+        <div class="c-slide">
+          <img src="Assets/car5.png" alt="Plantas de interior" loading="lazy">
+        </div>
+        <div class="c-slide">
+          <img src="Assets/car4.png" alt="Jardín con terraza" loading="lazy">
+        </div>
+        <div class="c-slide">
+          <img src="Assets/car3.png" alt="Entrada con jardín" loading="lazy">
+        </div>
+        <div class="c-slide">
+          <img src="Assets/car2.png" alt="Ficus de interior" loading="lazy">
+        </div>
+        <div class="c-slide">
+          <img src="Assets/car1.png" alt="Jardín exterior" loading="lazy">
+        </div>
+        <div class="c-slide">
+          <img src="Assets/hc.png" alt="Jardín residencial" loading="lazy">
+        </div>
+        <div class="c-slide">
+          <img src="Assets/resi.png" alt="Seto y terraza" loading="lazy">
+        </div>
+        <!-- Duplicates for seamless infinite loop -->
+        <div class="c-slide" aria-hidden="true">
+          <img src="Assets/car5.png" alt="" loading="lazy">
+        </div>
+        <div class="c-slide" aria-hidden="true">
+          <img src="Assets/car4.png" alt="" loading="lazy">
+        </div>
+        <div class="c-slide" aria-hidden="true">
+          <img src="Assets/car3.png" alt="" loading="lazy">
+        </div>
+        <div class="c-slide" aria-hidden="true">
+          <img src="Assets/car2.png" alt="" loading="lazy">
+        </div>
+        <div class="c-slide" aria-hidden="true">
+          <img src="Assets/car1.png" alt="" loading="lazy">
+        </div>
+        <div class="c-slide" aria-hidden="true">
+          <img src="Assets/hc.png" alt="" loading="lazy">
+        </div>
+        <div class="c-slide" aria-hidden="true">
+          <img src="Assets/resi.png" alt="" loading="lazy">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CONTACT ───────────────────────────────────────── -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="contact-inner">
+        <div class="contact-left fade-up">
+          <span class="section-label">Hablemos</span>
+          <h2>Comencemos <em>su proyecto</em></h2>
+          <p>Envíenos fotos de su espacio y lo analizaremos para elaborar la mejor propuesta adaptada a sus necesidades. Sin compromiso.</p>
+          <form class="contact-form" id="contactForm">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="fname">Nombre <span class="req">*</span></label>
+                <input type="text" id="fname" placeholder="Su nombre" autocomplete="name">
+              </div>
+              <div class="form-group">
+                <label for="femail">Email <span class="req">*</span></label>
+                <input type="email" id="femail" placeholder="su@email.com" autocomplete="email">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="fservice">Servicio</label>
+              <select id="fservice">
+                <option value="">Seleccionar servicio</option>
+                <option>Jardinería</option>
+                <option>Huerto Urbano</option>
+                <option>Servicios Comerciales</option>
+                <option>Consultoría</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="fmessage">Mensaje</label>
+              <textarea id="fmessage" placeholder="Cuéntenos sobre su espacio y qué desea conseguir…"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Fotos del espacio</label>
+              <label class="upload-trigger" for="fphotos">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M14 10v2.667A1.333 1.333 0 0112.667 14H3.333A1.333 1.333 0 012 12.667V10M10.667 4.667L8 2M8 2L5.333 4.667M8 2v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Subir imágenes de su espacio
+              </label>
+              <input type="file" id="fphotos" accept="image/*" multiple>
+              <div class="upload-preview" id="uploadPreview"></div>
+            </div>
+            <button type="submit" class="form-submit">Enviar mensaje</button>
+          </form>
+        </div>
+
+        <div class="contact-info fade-up">
+          <div class="ci-block">
+            <h4>Dirección</h4>
+            <p>C/Lorenzale, 20<br>Sant Martí, 08026, Barcelona</p>
+          </div>
+          <div class="ci-divider"></div>
+          <div class="ci-block">
+            <h4>Teléfono</h4>
+            <a href="tel:+34633775088">633 775 088</a>
+          </div>
+          <div class="ci-divider"></div>
+          <div class="ci-block">
+            <h4>Email</h4>
+            <a href="mailto:info@huertocity.com">info@huertocity.com</a>
+          </div>
+          <div class="ci-divider"></div>
+          <div class="ci-block">
+            <h4>Horario</h4>
+            <p>Lunes — Viernes: 8h — 18h<br>Sábados: 9h — 14h</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ────────────────────────────────────────── -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <span class="script-logo">Huertocity</span>
+          <p>Tapizando Barcelona en verde desde hace más de 10 años. Jardinería, huertos urbanos y servicios comerciales con profesionalidad y pasión por la naturaleza.</p>
+        </div>
+        <div class="footer-col">
+          <h5>Servicios</h5>
+          <ul>
+            <li><a href="#about">Jardinería</a></li>
+            <li><a href="#about">Huertos Urbanos</a></li>
+            <li><a href="#about">Servicios Comerciales</a></li>
+            <li><a href="#contact">Consultoría</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Empresa</h5>
+          <ul>
+            <li><a href="#about">Sobre nosotros</a></li>
+            <li><a href="#projects">Proyectos</a></li>
+            <li><a href="#testimonials">Testimonios</a></li>
+            <li><a href="#contact">Contacto</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 Huertocity. Todos los derechos reservados.</p>
+        <div class="footer-social">
+          <a href="https://www.instagram.com/huertocity/" target="_blank" rel="noopener noreferrer">Instagram</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Nav scroll
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    // ── Hero video ping-pong (forward → reverse → forward …) ──────────────
+    const heroVideo = document.getElementById('heroVideo');
+
+    // Start playing as soon as the browser has enough data
+    heroVideo.addEventListener('canplaythrough', () => {
+      heroVideo.play().catch(() => {});
+    }, { once: true });
+
+    // Fallback: try playing immediately in case canplaythrough already fired
+    heroVideo.play().catch(() => {});
+
+    let reverseMode = false;
+    let lastRafTs   = null;
+
+    heroVideo.addEventListener('ended', () => {
+      reverseMode = true;
+      lastRafTs   = null;
+      requestAnimationFrame(reverseStep);
+    });
+
+    function reverseStep(ts) {
+      if (!reverseMode) return;
+
+      if (lastRafTs !== null) {
+        const delta   = (ts - lastRafTs) / 1000;   // seconds elapsed
+        const newTime = heroVideo.currentTime - delta;
+
+        if (newTime <= 0) {
+          // Reached the beginning — switch back to forward play
+          reverseMode           = false;
+          heroVideo.currentTime = 0;
+          heroVideo.play().catch(() => {});
+          return;
+        }
+
+        heroVideo.currentTime = newTime;
+      }
+
+      lastRafTs = ts;
+      requestAnimationFrame(reverseStep);
+    }
+
+    // Services accordion
+    document.querySelectorAll('.sl-item').forEach(item => {
+      item.querySelector('.sl-row').addEventListener('click', () => {
+        const isOpen = item.classList.contains('open');
+        item.closest('.sl-list').querySelectorAll('.sl-item').forEach(i => {
+          i.classList.remove('open');
+          i.querySelector('.sl-row').setAttribute('aria-expanded', 'false');
+        });
+        if (!isOpen) {
+          item.classList.add('open');
+          item.querySelector('.sl-row').setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+
+    // Mobile menu
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const mobileMenu   = document.getElementById('mobileMenu');
+    const mobileClose  = document.getElementById('mobileClose');
+    hamburgerBtn.addEventListener('click', () => mobileMenu.classList.add('open'));
+    mobileClose.addEventListener('click',  () => mobileMenu.classList.remove('open'));
+    document.querySelectorAll('.ml').forEach(a =>
+      a.addEventListener('click', () => mobileMenu.classList.remove('open'))
+    );
+
+    // Duplicate testimonial cards inside each track for seamless CSS scroll loop
+    document.querySelectorAll('.t-track').forEach(track => {
+      track.querySelectorAll('.t-card').forEach(card => {
+        const clone = card.cloneNode(true);
+        clone.setAttribute('aria-hidden', 'true');
+        track.appendChild(clone);
+      });
+    });
+
+    // ── Image upload: accumulative with per-thumb delete ──────────────────
+    let uploadedFiles = [];
+
+    document.getElementById('fphotos').addEventListener('change', function () {
+      Array.from(this.files).forEach(file => {
+        const index = uploadedFiles.length;
+        uploadedFiles.push(file);
+        addThumb(file, index);
+      });
+      this.value = ''; // reset so the same file can be re-selected if deleted
+    });
+
+    function addThumb(file, index) {
+      const preview = document.getElementById('uploadPreview');
+      const wrap = document.createElement('div');
+      wrap.className = 'thumb-wrap';
+      wrap.dataset.index = index;
+
+      const img = document.createElement('img');
+      const reader = new FileReader();
+      reader.onload = e => { img.src = e.target.result; };
+      reader.readAsDataURL(file);
+
+      const del = document.createElement('button');
+      del.className = 'thumb-del';
+      del.type = 'button';
+      del.textContent = '×';
+      del.addEventListener('click', () => {
+        uploadedFiles[parseInt(wrap.dataset.index)] = null;
+        wrap.remove();
+      });
+
+      wrap.appendChild(img);
+      wrap.appendChild(del);
+      preview.appendChild(wrap);
+    }
+
+    // ── Form validation helpers ───────────────────────────────────────────
+    const fnameEl  = document.getElementById('fname');
+    const femailEl = document.getElementById('femail');
+
+    function setError(el, msg) {
+      el.classList.add('invalid');
+      let err = el.parentElement.querySelector('.field-error');
+      if (!err) {
+        err = document.createElement('span');
+        err.className = 'field-error';
+        el.parentElement.appendChild(err);
+      }
+      err.textContent = msg;
+    }
+
+    function clearError(el) {
+      el.classList.remove('invalid');
+      const err = el.parentElement.querySelector('.field-error');
+      if (err) err.remove();
+    }
+
+    [fnameEl, femailEl].forEach(el => el.addEventListener('input', () => clearError(el)));
+
+    // ── Contact form → mailto ─────────────────────────────────────────────
+    document.getElementById('contactForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const nameVal  = fnameEl.value.trim();
+      const emailVal = femailEl.value.trim();
+      const service  = document.getElementById('fservice').value;
+      const message  = document.getElementById('fmessage').value.trim();
+      const photos   = uploadedFiles.filter(Boolean);
+
+      // Validate required fields
+      clearError(fnameEl);
+      clearError(femailEl);
+      let valid = true;
+
+      if (!nameVal) {
+        setError(fnameEl, 'El nombre es obligatorio.');
+        valid = false;
+      }
+
+      if (!emailVal) {
+        setError(femailEl, 'El email es obligatorio.');
+        valid = false;
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
+        setError(femailEl, 'Introduce un email válido.');
+        valid = false;
+      }
+
+      if (!valid) {
+        // Scroll to first invalid field
+        this.querySelector('.invalid').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+
+      // Build structured email body
+      const lines = [
+        'NUEVA CONSULTA — HUERTOCITY.COM',
+        '--------------------------------',
+        'Nombre:   ' + nameVal,
+        'Email:    ' + emailVal,
+        'Servicio: ' + (service || 'No especificado'),
+        '',
+        'Mensaje:',
+        message || '(sin mensaje)',
+      ];
+
+      if (photos.length) {
+        lines.push('');
+        lines.push('Imágenes adjuntas (' + photos.length + '):');
+        photos.forEach(f => lines.push('  - ' + f.name));
+        lines.push('');
+        lines.push('(Adjunte las imágenes a este email si no se han enviado automáticamente.)');
+      }
+
+      const subject = 'Nueva consulta — ' + nameVal;
+      const body    = lines.join('\n');
+
+      window.location.href =
+        'mailto:info@huertocity.com' +
+        '?subject=' + encodeURIComponent(subject) +
+        '&body='    + encodeURIComponent(body);
+    });
+
+    // Fade-up on scroll
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+  </script>
+</body>
+</html>

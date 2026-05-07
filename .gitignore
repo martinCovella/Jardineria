@@ -1,0 +1,12 @@
+# macOS
+.DS_Store
+
+# Source / scratch video files not used by the site
+Assets/*.mov
+Assets/Mi película inverted.mp4
+
+# Design reference screenshots not used by the site
+Assets/Captura de pantalla*
+Assets/inspo.jpg
+Assets/inspo2.jpg
+Assets/image 2143.png
